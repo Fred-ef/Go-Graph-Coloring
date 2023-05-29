@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	. "GraphColoring/graph"
+	. "GraphColoring/coloring"
 )
 
 func main()  {
@@ -36,6 +37,14 @@ func main()  {
 			fmt.Println("<"+n.Label()+", "+n.Color()+">; ")
 		}
 	}
+
+	fmt.Println("2-Coloring of the complete triangle graph?")
+	found, err := CheckConfiguration(g,[]int{0,0,0},[]int{1,1,1}, 2)
+	fmt.Println(found)
+
+	fmt.Println("3-Coloring of the complete triangle graph")
+	found, err = CheckConfiguration(g,[]int{0,0,0},[]int{2,2,2}, 3)
+	fmt.Println(found)
 	
 	// some error cases...
 
@@ -77,5 +86,21 @@ func main()  {
 			fmt.Println("<"+n.Label()+", "+n.Color()+">; ")
 		}
 	}
+
+	fmt.Println("Check Configuration of nil")
+	found, err = CheckConfiguration(nil,[]int{0,0,0},[]int{2,2,2}, 3)
+	if err==nil{ fmt.Println(found) } else{ fmt.Println(err) }
+
+	fmt.Println("Check Configuration of different-length arrays")
+	found, err = CheckConfiguration(g,[]int{0,0,0,0},[]int{2,2,2}, 3)
+	if err==nil{ fmt.Println(found) } else{ fmt.Println(err) }
+
+	fmt.Println("Check Configuration: more digits than nodes")
+	found, err = CheckConfiguration(g,[]int{0,0,0,0},[]int{2,2,2,2}, 3)
+	if err==nil{ fmt.Println(found) } else{ fmt.Println(err) }
+
+	fmt.Println("Check Configuration: wrong number in base k")
+	found, err = CheckConfiguration(g,[]int{0,0,0},[]int{2,3,2}, 3)
+	if err==nil{ fmt.Println(found) } else{ fmt.Println(err) }
 
 }

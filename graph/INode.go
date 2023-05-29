@@ -5,6 +5,6 @@ package graph
 // and to update the color of the node
 type INode interface {
 	Label() string         // returns the label of the node
-	Color() string         // returns the color of the node
+	Color() string // returns the color of the node
 	SetColor(string) error // sets the color of the node
 }

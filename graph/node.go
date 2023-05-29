@@ -6,7 +6,7 @@ import "errors"
 // a node has a label, a color and a list of neighbours (adjacent nodes)
 type Node struct {
 	label string
-	color *string // mutable field
+	color *string // mutable
 }
 
 // MakeNode(l, ns) takes a label l and a list of neighbours ns
@@ -29,7 +29,7 @@ func (this Node) Color() string {
 
 // this.SetColor(c) sets this.color to c if c is a valid color and returns an error otherwise
 func (this Node) SetColor(color string) error {
-	if isColor(color) {
+	if IsColor(color) {
 		*(this.color) = color
 		return nil
 	}
