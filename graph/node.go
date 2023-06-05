@@ -12,9 +12,11 @@ type Node struct {
 // MakeNode(l, ns) takes a label l and a list of neighbours ns
 // and returns a new node with label l and with neighbours ns
 func MakeNode(label string) (INode, error) {
-	if label=="" { return nil, errors.New("A node must have a non-empty label.") }
+	if label == "" {
+		return nil, errors.New("a node must have a non-empty label")
+	}
 
-	return Node{label: label, color:new(string)}, nil
+	return Node{label: label, color: new(string)}, nil
 }
 
 // this.Label() returns the label of the node
