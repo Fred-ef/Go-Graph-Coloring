@@ -2,6 +2,7 @@ package graph
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -47,6 +48,12 @@ func contains[T comparable](elems []T, v T) bool {
 
 // starts the construction of a graph from a JSON file in the "examples" folder
 func LoadFromFile(path string) (IGraph, error) {
+
+	// checks if the string is not empty
+	if len(path) == 0 {
+		return nil, errors.New("the graph is empty")
+	}
+
 	// opening the JSON file
 	graphFile, err := os.Open(path)
 	if err != nil {
@@ -67,8 +74,19 @@ func LoadFromFile(path string) (IGraph, error) {
 	return graph, nil
 }
 
-// TEMP VERSION: starts the construction of a graph from a frontend request
+// MOCK UP: starts the construction of a graph from a frontend request
 func LoadFromUI(bytes []byte) (IGraph, error) {
+
+	// check bytes != nil
+	if bytes == nil {
+		return nil, errors.New("invalid JSON representation of the graph")
+	}
+
+	// check bytes not empty
+	if len(bytes) == 0 {
+		return nil, errors.New("the graph is empty")
+	}
+
 	graph, err := buildFromJson(bytes)
 	if err != nil {
 		return nil, err
@@ -79,6 +97,15 @@ func LoadFromUI(bytes []byte) (IGraph, error) {
 
 // constructs a graph from a JSON representation of an adjacency list
 func buildFromJson(bytes []byte) (IGraph, error) {
+	// check bytes != nil
+	if bytes == nil {
+		return nil, errors.New("invalid JSON representation of the graph")
+	}
+
+	// check bytes not empty
+	if len(bytes) == 0 {
+		return nil, errors.New("the graph is empty")
+	}
 
 	var adList AdList
 
