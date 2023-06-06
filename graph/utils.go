@@ -135,6 +135,6 @@ func buildFromJson(bytes []byte) (IGraph, error) {
 		fmt.Println("Error in graph construction: ", err)
 		return nil, err
 	}
-	fmt.Println(graph)
+
 	return graph, nil
 }

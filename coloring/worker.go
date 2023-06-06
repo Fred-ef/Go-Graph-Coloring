@@ -32,7 +32,6 @@ func FindColoringWorker(g IGraph, intervalStart, intervalEnd []int, k, digitsNum
 				fmt.Println("error - stop channel is not writable")
 			}
 		default:
-			fmt.Println("Closing channel")
 			close(stop)
 		}
 
@@ -67,8 +66,12 @@ func checkInterval(g IGraph, a, b []int, k int, stop <-chan bool) (found bool, c
 
 			// if valid assignment -> return true
 			found, err = validAssignment(g, current)
-			if err != nil { return false, nil, err }
-			if found { return true, current, nil }
+			if err != nil {
+				return false, nil, err
+			}
+			if found {
+				return true, current, nil
+			}
 
 		}
 	}
@@ -76,17 +79,17 @@ func checkInterval(g IGraph, a, b []int, k int, stop <-chan bool) (found bool, c
 	return false, nil, nil
 }
 
-// colorOf(coloring, nodes, node) returns the i-th color in coloring 
+// colorOf(coloring, nodes, node) returns the i-th color in coloring
 // if node is the i-th element of nodes.
 // if node is not in nodes, returns an error
 func colorOf(coloring []int, nodes []INode, n INode) (int, error) {
-	for i, nn := range nodes{
+	for i, nn := range nodes {
 		if nn.Label() == n.Label() {
 			return coloring[i], nil
 		}
 	}
 
-	return -1, errors.New("Error: node "+n.Label()+" not found")
+	return -1, errors.New("Error: node " + n.Label() + " not found")
 }
 
 // validRange(a, b, k) return true if
@@ -116,17 +119,21 @@ func validAssignment(g IGraph, coloring []int) (bool, error) {
 	}
 
 	// coloring[i] is the color of g.nodes[i] (pointwise coloring)
-	for i,n := range g.Nodes(){ 
-		neighbours, err := g.NeighboursOf(n.Label()) 
-		if err != nil{ fmt.Println(err.Error()) }
+	for i, n := range g.Nodes() {
+		neighbours, err := g.NeighboursOf(n.Label())
+		if err != nil {
+			fmt.Println(err.Error())
+		}
 
 		// peek the color of a neighbour of n
-		for _,nn := range neighbours{
+		for _, nn := range neighbours {
 			nn_color, err := colorOf(coloring, g.Nodes(), nn)
-			if err != nil { fmt.Println(err.Error()) }
+			if err != nil {
+				fmt.Println(err.Error())
+			}
 
 			// n.color == nn.color -> false
-			if coloring[i] == nn_color{
+			if coloring[i] == nn_color {
 				return false, nil
 			}
 		}
