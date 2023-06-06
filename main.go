@@ -8,7 +8,7 @@ import (
 
 func main() {
 
-	g, err := LoadFromFile("./examples/graph3.json")
+	g, err := LoadFromFile("./tests/graph_10_10.json")
 	if err != nil {
 		fmt.Println("Shutting down because of graph construction error...")
 		return
@@ -16,7 +16,7 @@ func main() {
 
 	// ##### SERVER CREATION #####
 
-	k := 9
+	k := 8
 
 	res, err := FindColoring(g, k)
 	if err != nil {
