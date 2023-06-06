@@ -64,22 +64,11 @@ func checkInterval(g IGraph, a, b []int, k int, stop <-chan bool) (found bool, c
 				return false, nil, nil
 			}
 		default:
-			// Assign colors to nodes
-			/*
-			err = g.Paint(ToColors(current))
-			if err != nil {
-				return false, nil, err
-			} */
 
 			// if valid assignment -> return true
 			found, err = validAssignment(g, current)
-			if err != nil {
-				return false, nil, err
-			}
-
-			if found {
-				return true, current, nil
-			}
+			if err != nil { return false, nil, err }
+			if found { return true, current, nil }
 
 		}
 	}
@@ -88,7 +77,7 @@ func checkInterval(g IGraph, a, b []int, k int, stop <-chan bool) (found bool, c
 }
 
 // colorOf(coloring, nodes, node) returns the i-th color in coloring 
-// if node is the i-th node in nodes.
+// if node is the i-th element of nodes.
 // if node is not in nodes, returns an error
 func colorOf(coloring []int, nodes []INode, n INode) (int, error) {
 	for i, nn := range nodes{
@@ -118,31 +107,6 @@ func validRange(a, b []int, k int) (valid bool, err error) {
 
 	return
 }
-
-/*
-// validAssignment(g) returns true if each node of g has a different color from
-// its adjacents' color; false otherwise
-func validAssignment(g IGraph) (bool, error) {
-	if g == nil {
-		return false, errors.New("nil argument")
-	}
-
-	// for each node, check if its color is the same as any of its neighbours
-	for _, n := range g.Nodes() {
-		neighbours, e := g.NeighboursOf(n.Label())
-		if e != nil {
-			return false, e
-		}
-
-		for _, nn := range neighbours {
-			if n.Color() == nn.Color() {
-				return false, nil
-			}
-		}
-	}
-
-	return true, nil
-} */
 
 // validAssignment(g) returns true if each node of g has a different color from
 // its adjacents' color; false otherwise

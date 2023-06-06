@@ -11,6 +11,9 @@ import (
 type Graph struct {
 	nodes map[string]INode      // nodes indexed by label
 	edges map[string]([]string) // set of edges: map from source node to target nodes
+	
+	// simple set of nodes - keep this array representation instead of computing it every time
+	nodeList []INode						
 }
 
 // Make(nodes, edges) returns a graph with the given nodes and edges
@@ -37,6 +40,7 @@ func Make(nodes []INode, edges []IEdge) (IGraph, error) {
 	g := *new(Graph)
 	g.nodes = make(map[string]INode)
 	g.edges = make(map[string]([]string))
+	g.nodeList = make([]INode, len(nodes))
 
 	// set nodes
 	for _, n := range nodes {
@@ -54,16 +58,17 @@ func Make(nodes []INode, edges []IEdge) (IGraph, error) {
 		}
 	}
 
+	// set nodeList
+	copy(g.nodeList,nodes)
+
 	return g, nil
 }
 
-// this.Nodes() returns the list of nodes of this
-func (this Graph) Nodes() (nodes []INode) {
-	for _, v := range this.nodes {
-		nodes = append(nodes, v)
-	}
-
-	return
+// this.Nodes() returns (a copy of) the list of nodes of this
+func (this Graph) Nodes() []INode {
+	nodes := make([]INode, len(this.nodeList))
+	copy(nodes, this.nodeList)
+	return nodes
 }
 
 // this.NeighboursOf(n) returns the list of adjacent nodes of n
@@ -74,27 +79,6 @@ func (this Graph) NeighboursOf(n string) (nodes []INode, e error) {
 
 	for _, k := range this.edges[n] {
 		nodes = append(nodes, this.nodes[k])
-	}
-
-	return
-}
-
-// this.Paint(colors) compute a pointwise assignment of the colors to the nodes of the graph;
-// if the length of the nodes and the length of the colors is not the same, returns an error
-func (this Graph) Paint(colors []string) (e error) {
-	if colors == nil {
-		return errors.New("Error: nil parameter.")
-	}
-
-	if len(this.nodes) != len(colors) {
-		return errors.New("This assignment of colors is no possible." +
-			"There are too many or too few colors")
-	}
-
-	i := 0
-	for _, n := range this.nodes {
-		n.SetColor(colors[i])
-		i++
 	}
 
 	return

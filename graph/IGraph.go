@@ -6,5 +6,4 @@ package graph
 type IGraph interface {
 	Nodes() []INode                       // returns the list of nodes of the graph
 	NeighboursOf(string) ([]INode, error) // returns the list of adjacents of the node with a given label
-	Paint([]string) error                 // assigns a color to each node, orderly;
 }
