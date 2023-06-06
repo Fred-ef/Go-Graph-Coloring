@@ -65,13 +65,14 @@ func checkInterval(g IGraph, a, b []int, k int, stop <-chan bool) (found bool, c
 			}
 		default:
 			// Assign colors to nodes
+			/*
 			err = g.Paint(ToColors(current))
 			if err != nil {
 				return false, nil, err
-			}
+			} */
 
 			// if valid assignment -> return true
-			found, err = validAssignment(g)
+			found, err = validAssignment(g, current)
 			if err != nil {
 				return false, nil, err
 			}
@@ -79,10 +80,24 @@ func checkInterval(g IGraph, a, b []int, k int, stop <-chan bool) (found bool, c
 			if found {
 				return true, current, nil
 			}
+
 		}
 	}
 
 	return false, nil, nil
+}
+
+// colorOf(coloring, nodes, node) returns the i-th color in coloring 
+// if node is the i-th node in nodes.
+// if node is not in nodes, returns an error
+func colorOf(coloring []int, nodes []INode, n INode) (int, error) {
+	for i, nn := range nodes{
+		if nn.Label() == n.Label() {
+			return coloring[i], nil
+		}
+	}
+
+	return -1, errors.New("Error: node "+n.Label()+" not found")
 }
 
 // validRange(a, b, k) return true if
@@ -104,6 +119,7 @@ func validRange(a, b []int, k int) (valid bool, err error) {
 	return
 }
 
+/*
 // validAssignment(g) returns true if each node of g has a different color from
 // its adjacents' color; false otherwise
 func validAssignment(g IGraph) (bool, error) {
@@ -120,6 +136,33 @@ func validAssignment(g IGraph) (bool, error) {
 
 		for _, nn := range neighbours {
 			if n.Color() == nn.Color() {
+				return false, nil
+			}
+		}
+	}
+
+	return true, nil
+} */
+
+// validAssignment(g) returns true if each node of g has a different color from
+// its adjacents' color; false otherwise
+func validAssignment(g IGraph, coloring []int) (bool, error) {
+	if g == nil {
+		return false, errors.New("nil argument")
+	}
+
+	// coloring[i] is the color of g.nodes[i] (pointwise coloring)
+	for i,n := range g.Nodes(){ 
+		neighbours, err := g.NeighboursOf(n.Label()) 
+		if err != nil{ fmt.Println(err.Error()) }
+
+		// peek the color of a neighbour of n
+		for _,nn := range neighbours{
+			nn_color, err := colorOf(coloring, g.Nodes(), nn)
+			if err != nil { fmt.Println(err.Error()) }
+
+			// n.color == nn.color -> false
+			if coloring[i] == nn_color{
 				return false, nil
 			}
 		}

@@ -7,7 +7,7 @@ import (
 	"sync"
 )
 
-var CONF_PER_WORKER = 100000
+var CONF_PER_WORKER = 10000
 
 func FindColoring(g IGraph, k int) (Result, error) {
 
